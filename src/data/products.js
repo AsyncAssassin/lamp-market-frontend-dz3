@@ -253,7 +253,7 @@ export const products = [
     luminousFlux: 850,
     socketType: 'E14',
     stock: 0,
-    isActive: true,
+    isActive: false,
   },
   {
     id: 17,

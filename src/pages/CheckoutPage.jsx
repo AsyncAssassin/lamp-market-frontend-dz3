@@ -33,6 +33,15 @@ export function CheckoutPage() {
 
   const updateField = (field, value) => {
     setFormValues((currentValues) => ({ ...currentValues, [field]: value }))
+    setErrors((currentErrors) => {
+      if (!currentErrors[field]) {
+        return currentErrors
+      }
+
+      const nextErrors = { ...currentErrors }
+      delete nextErrors[field]
+      return nextErrors
+    })
   }
 
   const handleSubmit = (event) => {
@@ -88,16 +97,6 @@ export function CheckoutPage() {
           </label>
 
           <label>
-            <span>Email</span>
-            <input
-              type="email"
-              value={formValues.email}
-              onChange={(event) => updateField('email', event.target.value)}
-            />
-            {errors.email && <small>{errors.email}</small>}
-          </label>
-
-          <label>
             <span>Телефон</span>
             <input
               type="tel"
@@ -105,6 +104,16 @@ export function CheckoutPage() {
               onChange={(event) => updateField('phone', event.target.value)}
             />
             {errors.phone && <small>{errors.phone}</small>}
+          </label>
+
+          <label>
+            <span>Email</span>
+            <input
+              type="email"
+              value={formValues.email}
+              onChange={(event) => updateField('email', event.target.value)}
+            />
+            {errors.email && <small>{errors.email}</small>}
           </label>
 
           <label>

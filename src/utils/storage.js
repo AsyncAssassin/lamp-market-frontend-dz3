@@ -4,8 +4,23 @@ const CART_STORAGE_KEY = 'lamp-market-cart'
 export const LAST_ORDER_STORAGE_KEY = 'lamp-market-last-order'
 
 function clampQuantity(value, product, fallback = 1) {
+  const isNumber = typeof value === 'number'
+  const isNumericString = typeof value === 'string' && value.trim() !== ''
+
+  if (!isNumber && !isNumericString) {
+    return null
+  }
+
   const numeric = Number(value)
-  const base = Number.isFinite(numeric) ? Math.floor(numeric) : fallback
+  if (!Number.isFinite(numeric)) {
+    return null
+  }
+
+  const base = Math.floor(numeric)
+  if (base < fallback) {
+    return null
+  }
+
   const safeQuantity = Math.max(1, base)
   return Math.min(safeQuantity, product.stock)
 }
@@ -28,6 +43,10 @@ export function normalizeCart(rawCart, products = defaultProducts) {
 
     const previousQuantity = normalized.get(productId)?.quantity ?? 0
     const itemQuantity = clampQuantity(item?.quantity, product)
+    if (!itemQuantity) {
+      return
+    }
+
     const quantity = Math.min(previousQuantity + itemQuantity, product.stock)
 
     normalized.set(productId, { productId, quantity })

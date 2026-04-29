@@ -29,7 +29,11 @@ export function ProductPage() {
   }
 
   const isAvailable = product.stock > 0
-  const safeQuantity = Math.min(Math.max(1, Number(quantity) || 1), Math.max(product.stock, 1))
+  const numericQuantity = Number(quantity)
+  const safeQuantity = Math.min(
+    Math.max(1, Number.isFinite(numericQuantity) ? Math.floor(numericQuantity) : 1),
+    Math.max(product.stock, 1),
+  )
 
   return (
     <article className="product-detail">
